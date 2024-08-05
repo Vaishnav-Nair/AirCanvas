@@ -4,7 +4,7 @@ import VideoFeed from './components/VideoFeed';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App container">
       <VideoFeed />
     </div>
   );
