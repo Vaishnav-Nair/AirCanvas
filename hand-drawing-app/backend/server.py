@@ -172,6 +172,10 @@ def generate_frames():
 def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/paint_window')
+def paint_window_feed():
+    return Response(generate_paint_window(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 @app.route('/')
 def index():
     return render_template('index.html')

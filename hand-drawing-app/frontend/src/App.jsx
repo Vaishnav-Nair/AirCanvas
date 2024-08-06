@@ -3,6 +3,7 @@ import './App.css';
 import VideoFeed from './components/VideoFeed';
 import PaintCanvas from './components/PaintCanvas';
 
+
 function App() {
   return (
    <div className='wrapper'> 
@@ -11,7 +12,7 @@ function App() {
       </div>
 
       <div className='container'>
-          <PaintCanvas />
+        <PaintCanvas />
       </div>
     </div> 
   );
