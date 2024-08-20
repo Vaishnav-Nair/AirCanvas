@@ -12,7 +12,7 @@ function App() {
       </div>
 
       <div className='container'>
-        <PaintCanvas />
+        <PaintCanvas /> 
       </div>
     </div> 
   );

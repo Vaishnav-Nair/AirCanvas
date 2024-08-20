@@ -167,6 +167,18 @@ def generate_frames():
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        
+def generate_paint_window():
+    global paintWindow
+
+    while True:
+        ret, buffer = cv2.imencode('.jpg', paintWindow)
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+        
+
 
 @app.route('/video_feed')
 def video_feed():
