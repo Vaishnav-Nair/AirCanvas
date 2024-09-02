@@ -22,24 +22,29 @@ kernel = np.ones((5,5), np.uint8)
 colors = [(255,0,0),(0,255,0),(0,0,255),(0,255,255)]
 colorIndex = 0
 
-paintWindow = np.zeros((471,636,3)) + 255
-paintWindow = cv2.rectangle(paintWindow,(40,1),(140,65),(0,0,0),2)
-paintWindow = cv2.rectangle(paintWindow,(160,1),(255,65),(255,0,0),2)
-paintWindow = cv2.rectangle(paintWindow,(275,1),(370,65),(0,255,0),2)
-paintWindow = cv2.rectangle(paintWindow,(390,1),(485,65),(0,0,255),2)
-paintWindow = cv2.rectangle(paintWindow,(505,1),(600,65),(0,255,255),2)
+# Create a paint window with the same dimensions as the webcam frame
+paintWindow = np.ones((480, 640, 3), dtype=np.uint8) * 255
 
-cv2.putText(paintWindow,"CLEAR", (49,33), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow,"BLUE", (185,33), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow,"GREEN", (298,33), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow,"RED", (420,33), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow,"YELLOW", (520,33), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,0), 2, cv2.LINE_AA)
+# Draw the buttons on the paint window
+paintWindow = cv2.rectangle(paintWindow, (40, 1), (140, 65), (0, 0, 0), 2)
+paintWindow = cv2.rectangle(paintWindow, (160, 1), (255, 65), (255, 0, 0), 2)
+paintWindow = cv2.rectangle(paintWindow, (275, 1), (370, 65), (0, 255, 0), 2)
+paintWindow = cv2.rectangle(paintWindow, (390, 1), (485, 65), (0, 0, 255), 2)
+paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), (0, 255, 255), 2)
+
+cv2.putText(paintWindow, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "BLUE", (185, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "GREEN", (298, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "RED", (420, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "YELLOW", (520, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
 
 mpHands = mp.solutions.hands
 hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
 mpDraw = mp.solutions.drawing_utils
 
 cap = cv2.VideoCapture(0)
+cap.set(3, 640)  # Set width to 640
+cap.set(4, 480)  # Set height to 480
 
 if not cap.isOpened():
     print("Error: Could not open webcam.")
@@ -54,22 +59,10 @@ def generate_frames():
         if not ret:
             break
 
-        x, y, c = frame.shape
         frame = cv2.flip(frame, 1)
         framergb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        paintWindow = cv2.rectangle(paintWindow,(40,1),(140,65),(0,0,0),2)
-        paintWindow = cv2.rectangle(paintWindow,(160,1),(255,65),(255,0,0),2)
-        paintWindow = cv2.rectangle(paintWindow,(275,1),(370,65),(0,255,0),2)
-        paintWindow = cv2.rectangle(paintWindow,(390,1),(485,65),(0,0,255),2)
-        paintWindow = cv2.rectangle(paintWindow,(505,1),(600,65),(0,255,255),2)
-
-        cv2.putText(paintWindow,"CLEAR", (49,33), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,0), 2, cv2.LINE_AA)
-        cv2.putText(paintWindow,"BLUE", (185,33), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,0), 2, cv2.LINE_AA)
-        cv2.putText(paintWindow,"GREEN", (298,33), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,0), 2, cv2.LINE_AA)
-        cv2.putText(paintWindow,"RED", (420,33), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,0), 2, cv2.LINE_AA)
-        cv2.putText(paintWindow,"YELLOW", (520,33), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,0), 2, cv2.LINE_AA)
-
+        # Draw the buttons on the webcam frame
         cv2.rectangle(frame, (40, 1), (140, 65), (0, 0, 0), 2)
         cv2.rectangle(frame, (160, 1), (255, 65), (255, 0, 0), 2)
         cv2.rectangle(frame, (275, 1), (370, 65), (0, 255, 0), 2)
@@ -85,13 +78,11 @@ def generate_frames():
         result = hands.process(framergb)
 
         if result.multi_hand_landmarks:
-
             landmarks = []
             for handlsms in result.multi_hand_landmarks:
                 for lm in handlsms.landmark:
                     lmx = int(lm.x * 640)
                     lmy = int(lm.y * 480)
-
                     landmarks.append([lmx, lmy])
 
                 mpDraw.draw_landmarks(frame, handlsms, mpHands.HAND_CONNECTIONS)
@@ -112,7 +103,7 @@ def generate_frames():
                 red_index += 1
 
             elif center[1] <= 65:
-                if 40 <= center[0] <= 140: # Clear Button
+                if 40 <= center[0] <= 140:  # Clear Button
                     bpoints = [deque(maxlen=512)]
                     gpoints = [deque(maxlen=512)]
                     rpoints = [deque(maxlen=512)]
@@ -123,7 +114,7 @@ def generate_frames():
                     yellow_index = 0
                     green_index = 0
 
-                    paintWindow[67:,:,:] = 255
+                    paintWindow[67:, :, :] = 255
                 elif 160 <= center[0] <= 255:
                     colorIndex = 0
                 elif 275 <= center[0] <= 370:
@@ -167,18 +158,19 @@ def generate_frames():
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-        
+
 def generate_paint_window():
     global paintWindow
 
     while True:
         ret, buffer = cv2.imencode('.jpg', paintWindow)
-        frame = buffer.tobytes()
+        paint_frame = buffer.tobytes()
         yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+               b'Content-Type: image/jpeg\r\n\r\n' + paint_frame + b'\r\n')
 
-        
-
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/video_feed')
 def video_feed():
@@ -188,10 +180,5 @@ def video_feed():
 def paint_window_feed():
     return Response(generate_paint_window(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
