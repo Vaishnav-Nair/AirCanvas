@@ -1,20 +1,28 @@
 import React from 'react';
 import './App.css';
-import VideoFeed from './components/VideoFeed';
-import PaintCanvas from './components/PaintCanvas';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Features from './components/Features';
+import Canvas from './components/Canvas';
 
 
 function App() {
   return (
-   <div className='wrapper'> 
-      <div className="App container">
-        <VideoFeed />
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Header />
+              <Features />
+              <Footer />
+            </>
+          } />
+          <Route path="/Canvas" element={<Canvas />} />
+        </Routes>
       </div>
-
-      <div className='container'>
-        <PaintCanvas /> 
-      </div>
-    </div> 
+    </Router>
   );
 }
 

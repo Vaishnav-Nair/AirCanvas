@@ -85,7 +85,7 @@ def generate_frames():
         result = hands.process(framergb)
 
         if result.multi_hand_landmarks:
-
+            
             landmarks = []
             for handlsms in result.multi_hand_landmarks:
                 for lm in handlsms.landmark:
