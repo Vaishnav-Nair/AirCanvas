@@ -3,10 +3,11 @@ import cv2
 import mediapipe as mp
 import numpy as np
 from collections import deque
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
-# Global variables
 bpoints = [deque(maxlen=1024)]
 gpoints = [deque(maxlen=1024)]
 rpoints = [deque(maxlen=1024)]
@@ -104,7 +105,7 @@ def generate_frames():
                 red_index += 1
 
             elif center[1] <= 65:
-                if 40 <= center[0] <= 140:  # Clear Button
+                if 40 <= center[0] <= 140: 
                     bpoints = [deque(maxlen=512)]
                     gpoints = [deque(maxlen=512)]
                     rpoints = [deque(maxlen=512)]
@@ -168,6 +169,8 @@ def generate_paint_window():
         paint_frame = buffer.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + paint_frame + b'\r\n')
+        
+
 
 @app.route('/')
 def index():
