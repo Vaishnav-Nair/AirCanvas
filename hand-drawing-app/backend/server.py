@@ -153,8 +153,8 @@ def generate_frames():
                 for k in range(1, len(points[i][j])):
                     if points[i][j][k-1] is None or points[i][j][k] is None:
                         continue
-                    cv2.line(frame, points[i][j][k-1], points[i][j][k], colors[i], 2)
-                    cv2.line(paintWindow, points[i][j][k-1], points[i][j][k], colors[i], 2)
+                    cv2.line(frame, points[i][j][k-1], points[i][j][k], colors[i], 5)
+                    cv2.line(paintWindow, points[i][j][k-1], points[i][j][k], colors[i], 5)
 
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
@@ -179,10 +179,6 @@ def video_feed():
 @app.route('/paint_window')
 def paint_window_feed():
     return Response(generate_paint_window(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

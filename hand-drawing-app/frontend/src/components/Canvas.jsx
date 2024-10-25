@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
+import './Canvas.css';
 import html2canvas from 'html2canvas';
 import CustomButton from './SaveButton';
 import VideoFeed from './VideoFeed';
 import PaintCanvas from './PaintCanvas';
-import './Canvas.css'; // Add your styles here
 
 function Canvas() {
     const paintAreaRef = useRef(); // Reference to the paint area

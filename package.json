@@ -1,6 +1,10 @@
 {
   "dependencies": {
+    "@react-pdf/renderer": "^4.0.0",
     "fabric": "^6.4.3",
-    "html2canvas": "^1.4.1"
+    "html2canvas": "^1.4.1",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.7.76",
+    "react-pdf": "^9.1.1"
   }
 }
