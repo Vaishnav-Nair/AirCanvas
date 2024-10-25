@@ -3,10 +3,10 @@ import cv2
 import mediapipe as mp
 import numpy as np
 from collections import deque
-from flask_socketio import SocketIO, emit
+#from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+#socketio = SocketIO(app)
 
 bpoints = [deque(maxlen=1024)]
 gpoints = [deque(maxlen=1024)]
