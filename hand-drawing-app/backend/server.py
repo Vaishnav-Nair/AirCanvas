@@ -1,12 +1,12 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template_string, Response, send_file
+from flask_cors import CORS
 import cv2
 import mediapipe as mp
 import numpy as np
 from collections import deque
-#from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-#socketio = SocketIO(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 bpoints = [deque(maxlen=1024)]
 gpoints = [deque(maxlen=1024)]
@@ -35,8 +35,8 @@ paintWindow = cv2.rectangle(paintWindow, (505, 1), (600, 65), (0, 255, 255), 2)
 
 cv2.putText(paintWindow, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
 cv2.putText(paintWindow, "BLUE", (185, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "GREEN", (298, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-cv2.putText(paintWindow, "RED", (420, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "GREEN", (298, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2, cv2.LINE_AA)
+cv2.putText(paintWindow, "RED", (420, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2, cv2.LINE_AA)
 cv2.putText(paintWindow, "YELLOW", (520, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
 
 mpHands = mp.solutions.hands
@@ -169,12 +169,8 @@ def generate_paint_window():
         paint_frame = buffer.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + paint_frame + b'\r\n')
-        
 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 @app.route('/video_feed')
 def video_feed():
@@ -183,6 +179,10 @@ def video_feed():
 @app.route('/paint_window')
 def paint_window_feed():
     return Response(generate_paint_window(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
