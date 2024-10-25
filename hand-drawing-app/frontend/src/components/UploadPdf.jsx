@@ -1,24 +1,45 @@
 /*import React, { useRef, useState } from 'react';
-import { Document, Page } from 'react-pdf';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
+
+// Set the worker source to the local path
+pdfjs.GlobalWorkerOptions.workerSrc = unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs;
 
 const UploadPdf = () => {
-    const [pdfUrl, setPdfUrl] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
     const canvasRef = useRef(null);
-    const contextRef = useRef(null);
+    const [pdfUrl, setPdfUrl] = useState(null);
     const [drawing, setDrawing] = useState(false);
     const [lastX, setLastX] = useState(0);
     const [lastY, setLastY] = useState(0);
+    const contextRef = useRef(null);
 
     const handleUpload = (event) => {
         const file = event.target.files[0];
         if (file && file.type === 'application/pdf') {
             const fileUrl = URL.createObjectURL(file);
-            setPdfUrl(fileUrl); // Set the URL for the PDF
-            setPageNumber(1); // Reset to the first page
+            setPdfUrl(fileUrl);
+            drawPDF(fileUrl);
         } else {
             alert("Please upload a valid PDF file.");
         }
+    };
+
+    const drawPDF = async (pdfUrl) => {
+        const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1.5 });
+
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+            canvasContext: context,
+            viewport: viewport,
+        };
+
+        await page.render(renderContext).promise;
+        contextRef.current = context;
     };
 
     const startDrawing = (e) => {
@@ -39,8 +60,8 @@ const UploadPdf = () => {
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);
         ctx.lineTo(x, y);
-        ctx.strokeStyle = 'red'; // Set drawing color
-        ctx.lineWidth = 2; // Set line width
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
         ctx.stroke();
         setLastX(x);
         setLastY(y);
@@ -52,21 +73,14 @@ const UploadPdf = () => {
 
     return (
         <div style={{ textAlign: 'center', position: 'relative' }}>
-            {pdfUrl && (
-                <div style={{ position: 'relative' }}>
-                    <canvas
-                        ref={canvasRef}
-                        style={{ border: '1px solid black', marginBottom: '10px', position: 'absolute', top: 0, left: 0 }}
-                        onMouseDown={startDrawing}
-                        onMouseMove={draw}
-                        onMouseUp={stopDrawing}
-                        onMouseLeave={stopDrawing}
-                    />
-                    <Document file={pdfUrl}>
-                        <Page pageNumber={pageNumber} width={600} />
-                    </Document>
-                </div>
-            )}
+            <canvas
+                ref={canvasRef}
+                style={{ border: '1px solid black', marginBottom: '10px' }}
+                onMouseDown={startDrawing}
+                onMouseMove={draw}
+                onMouseUp={stopDrawing}
+                onMouseLeave={stopDrawing}
+            />
             <input
                 type="file"
                 accept="application/pdf"

@@ -37,6 +37,7 @@ function Canvas() {
                 </div>
             </div>
             <CustomButton onClick={handleSave} /> {/* Pass handleSave to CustomButton */}
+
         </div>
     );
 }
