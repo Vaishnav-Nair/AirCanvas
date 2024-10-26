@@ -6,38 +6,41 @@ import VideoFeed from './VideoFeed';
 import PaintCanvas from './PaintCanvas';
 
 function Canvas() {
-    const paintAreaRef = useRef(); // Reference to the paint area
+    const paintAreaRef = useRef(); 
 
     const handleSave = async () => {
         if (paintAreaRef.current) {
-            // Capture the paint area including writings
             const canvas = await html2canvas(paintAreaRef.current, {
-                useCORS: true, // Enable CORS for images
-                backgroundColor: null // Ensures a transparent background if needed
+                useCORS: true,
+                backgroundColor: null 
             });
-            const imageData = canvas.toDataURL("image/png"); // Convert to data URL
-            const link = document.createElement('a'); // Create a link element
-            link.href = imageData; // Set the link's href to the image data
-            link.download = 'canvas-image.png'; // Specify the download filename
-            document.body.appendChild(link); // Append link to the body
-            link.click(); // Trigger the download
-            document.body.removeChild(link); // Remove the link after download
+            const imageData = canvas.toDataURL("image/png");
+            const link = document.createElement('a');
+            link.href = imageData;
+            link.download = 'canvas-image.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     };
 
     return (
-        <div className='mainBody'>
-            <div className='wrapper'>
-                <div className="App contains">
-                    <VideoFeed />
+        <div className="mainBody">
+          <div className='outer-container'>
+            <div className="wrapper">
+                <div className="card">
+                    <div className="canvas-container">
+                        <VideoFeed />
+                    </div>
+                    <div className="canvas-container" ref={paintAreaRef}>
+                        <PaintCanvas />
+                    </div>
                 </div>
-                <div className='contains' ref={paintAreaRef}>
-                    <PaintCanvas /> {/* Renders the image from the server */}
-                    {/* Ensure your writings are rendered here */}
+                <div className="save-button">
+                    <CustomButton onClick={handleSave} />
                 </div>
             </div>
-            <CustomButton onClick={handleSave} /> {/* Pass handleSave to CustomButton */}
-
+          </div>
         </div>
     );
 }

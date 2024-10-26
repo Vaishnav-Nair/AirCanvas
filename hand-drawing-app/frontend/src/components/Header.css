@@ -1,17 +1,69 @@
+/* Header.css */
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
+
 .header {
-    background-color: #333;
-    color: white;
-    padding: 100px 0;
-    text-align: center;
-  }
-  
-  .header h1 {
-    font-size: 3rem;
-  }
-  
-  .header p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    color: whitesmoke;
-  }
-  
+  background-color: #1f2937; /* Tailwind's bg-gray-900 */
+  color: #ffffff; /* Tailwind's text-white */
+  text-align: center;
+  padding: 4rem 1rem; /* Reduced padding to decrease gap */
+  max-width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Tailwind's lg:h-screen */
+}
+
+.container {
+  max-width: 48rem; /* Tailwind's max-w-3xl */
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.container h1 {
+  font-size: 5rem; /* Tailwind's text-3xl */
+  font-weight: 800; /* Tailwind's font-extrabold */
+  background: linear-gradient(to right, #86efac, #3b82f6, #a855f7); /* Tailwind's bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 */
+  -webkit-background-clip: text;
+  color: transparent; /* Tailwind's text-transparent */
+  margin-bottom: 1rem;
+}
+
+.container p {
+  font-size: 1.5rem; /* Tailwind's sm:text-xl */
+  line-height: 1.75rem; /* Tailwind's relaxed line-height */
+  max-width: 40rem;
+  margin: 1rem auto; /* Tailwind's mt-4 */
+  color:aliceblue
+}
+
+.cta-btn {
+  display: inline-block;
+  padding: 0.75rem 3rem; /* Tailwind's px-12 py-3 */
+  font-size: 0.875rem; /* Tailwind's text-sm */
+  font-weight: 500; /* Tailwind's font-medium */
+  color: #ffffff;
+  background-color: #3b82f6; /* Tailwind's bg-blue-600 */
+  border: 2px solid #3b82f6;
+  border-radius: 0.5rem; /* Tailwind's rounded */
+  transition: all 0.3s;
+  margin-top: 2rem; /* Tailwind's mt-8 */
+}
+
+.cta-btn:hover {
+  background-color: transparent;
+  color: #ffffff; /* Keep white on hover */
+}
+
+.cta-btn:focus,
+.cta-btn:active {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Focus ring effect */
+}

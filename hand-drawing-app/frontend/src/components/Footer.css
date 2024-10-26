@@ -1,12 +1,21 @@
+/* Footer.css */
+
 .footer {
-    background-color: #333;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-  }
-  
-  .footer p {
-    margin: 0;
-    color: whitesmoke;
-  }
-  
+  background-color: #1f2937;
+  color: #ffffff;
+  padding: 2rem 1rem;
+  text-align: center;
+  width: 100vw;
+  margin-top: 0; /* Ensure no top margin */
+}
+
+.container {
+  max-width: 48rem; /* Tailwind's max-w-3xl */
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.footer p {
+  font-size: 1rem; /* Equivalent to text-base */
+  color: #d1d5db; /* Slightly lighter text color */
+}

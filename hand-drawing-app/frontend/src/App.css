@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+}
 
 .container {
   width: 85%;
@@ -15,7 +26,7 @@
   padding: 12px 25px;
   text-decoration: none;
   border-radius: 8px;
-  font-size: 1.1rem;
+  font-size: 3rem;
   transition: background-color 0.3s ease;
 }
 

@@ -52,7 +52,6 @@ function VideoFeed() {
 
   return (
     <div>
-      <h3>Video Feed</h3>
       <img
         ref={videoRef}
         src="http://127.0.0.1:5000/video_feed"
